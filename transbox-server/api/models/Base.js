@@ -36,6 +36,6 @@ module.exports = {
     return Math.floor(rnd);
   },
   config: {
-    host: 'http://localhost:1337'
+    host: 'http://192.168.1.115:1337'
   },
 };

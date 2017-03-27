@@ -123,6 +123,7 @@ module.exports.routes = addGlobalPrefix({
   'get /transferInfo': 'TransferController.getInfo',
   'put /transfer/:transferid/done': 'TransferController.transferDone',
   'get /transfers': 'TransferController.getTransfers',
+  'get /transfersSql': 'TransferController.getTransfersSql',
   'get /export/:transferid': 'TransferController.getExportFile',
 
   //transfer record routes
@@ -148,5 +149,5 @@ module.exports.routes = addGlobalPrefix({
   'get /socket/getSocketId/:boxid': 'SocketController.getSocketId',
 
   // check record routes
-  'get /checkRecord/:phone': 'CheckRecordController.getTransferByPhone'  
+  'get /checkRecord/:phone': 'CheckRecordController.getTransferByPhone'
 });
