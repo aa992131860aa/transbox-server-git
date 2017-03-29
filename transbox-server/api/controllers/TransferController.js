@@ -15,13 +15,13 @@ var app = express();
 
 var mysql = require('mysql');
 //配置模块
-var settings={};
+var settings = {};
 
 //导出
 var officegen = require('officegen');
 var fs = require('fs');
 var path = require('path');
-var docx = officegen ( 'docx' );
+var docx = officegen('docx');
 var async = require('async');
 
 module.exports = {
@@ -809,11 +809,11 @@ module.exports = {
       console.log(findParams);
 
       //连接数据库
-      settings.db={
+      settings.db = {
         host: 'localhost',
         user: 'root',
         password: '123456',
-        database:'transbox'
+        database: 'transbox'
       }
       var connection = mysql.createConnection(settings.db);
       connection.connect();
@@ -835,13 +835,13 @@ module.exports = {
         'op_createAt,op.modifyAt op_modifyAt from transfer t,organ o,box b,hospital h,transferperson tp,opo op where ' +
         't.dbStatus = "N" and t.`status` = "done" and b.boxid = t.box_id and h.hospitalid = t.to_hosp_id and o.organid ' +
         '= t.organ_id and tp.transferPersonid = t.transferPerson_id and op.opoid = t.opo_id ORDER BY t.createAt' +
-        ' DESC limit '+start +','+number;
+        ' DESC limit ' + start + ',' + number;
 
 
       var selectCount = 'select count(t.transferid) count from transfer t,organ o,box b,hospital h,transferperson tp,opo' +
         ' op where t.dbStatus = "N" and t.`status` = "done" and b.boxid = t.box_id and h.hospitalid = t.to_hosp_id ' +
-      'and o.organid = t.organ_id and tp.transferPersonid = t.transferPerson_id and op.opoid = t.opo_id ';
-      connection.query(selectCount,function(err,rows){
+        'and o.organid = t.organ_id and tp.transferPersonid = t.transferPerson_id and op.opoid = t.opo_id ';
+      connection.query(selectCount, function (err, rows) {
         if (err) throw err;
         count = rows[0]['count'];
 
@@ -858,85 +858,83 @@ module.exports = {
         for (var i = 0; i < rows.length; i++) {
 
 
-            var transbox = new Object();
-            var boxInfo = new Object();
-            var organInfo = new Object();
-            var toHospitalInfo = new Object();
-            var transferPersonInfo = new Object();
-            var opoInfo = new Object();
-             transbox.transferid = rows[i]['t_transferid'];
-            transbox.transferNumber = rows[i]['t_transferNumber'];
-            transbox.organCount = rows[i]['t_organCount'];
-            transbox.boxPin = rows[i]['t_boxPin'];
-            transbox.fromCity = rows[i]['t_fromCity'];
-            transbox.toHospName = rows[i]['t_toHospName'];
-            transbox.tracfficType = rows[i]['t_tracfficType'];
-            transbox.deviceType = rows[i]['t_deviceType'];
-            transbox.getOrganAt = rows[i]['t_getOrganAt'];
-            transbox.startAt = rows[i]['t_startAt'];
-            transbox.endAt = rows[i]['t_endAt'];
-            transbox.status = rows[i]['t_status'];
-            transbox.createAt = rows[i]['t_createAt'];
-            transbox.modifyAt = rows[i]['t_modifyAt'];
+          var transbox = new Object();
+          var boxInfo = new Object();
+          var organInfo = new Object();
+          var toHospitalInfo = new Object();
+          var transferPersonInfo = new Object();
+          var opoInfo = new Object();
+          transbox.transferid = rows[i]['t_transferid'];
+          transbox.transferNumber = rows[i]['t_transferNumber'];
+          transbox.organCount = rows[i]['t_organCount'];
+          transbox.boxPin = rows[i]['t_boxPin'];
+          transbox.fromCity = rows[i]['t_fromCity'];
+          transbox.toHospName = rows[i]['t_toHospName'];
+          transbox.tracfficType = rows[i]['t_tracfficType'];
+          transbox.deviceType = rows[i]['t_deviceType'];
+          transbox.getOrganAt = rows[i]['t_getOrganAt'];
+          transbox.startAt = rows[i]['t_startAt'];
+          transbox.endAt = rows[i]['t_endAt'];
+          transbox.status = rows[i]['t_status'];
+          transbox.createAt = rows[i]['t_createAt'];
+          transbox.modifyAt = rows[i]['t_modifyAt'];
 
-            boxInfo.boxid = rows[i]['b_boxid'];
-            boxInfo.deviceId = rows[i]['b_deviceId'];
-            boxInfo.qrcode = rows[i]['b_qrcode'];
-            boxInfo.model = rows[i]['b_model'];
-            boxInfo.transferStatus = rows[i]['b_transferStatus'];
-            boxInfo.status = rows[i]['b_status'];
-            boxInfo.createAt = rows[i]['b_createAt'];
-            boxInfo.modifyAt = rows[i]['b_modifyAt'];
-            transbox.boxInfo = boxInfo;
+          boxInfo.boxid = rows[i]['b_boxid'];
+          boxInfo.deviceId = rows[i]['b_deviceId'];
+          boxInfo.qrcode = rows[i]['b_qrcode'];
+          boxInfo.model = rows[i]['b_model'];
+          boxInfo.transferStatus = rows[i]['b_transferStatus'];
+          boxInfo.status = rows[i]['b_status'];
+          boxInfo.createAt = rows[i]['b_createAt'];
+          boxInfo.modifyAt = rows[i]['b_modifyAt'];
+          transbox.boxInfo = boxInfo;
 
-            organInfo.organid = rows[i]['o_organid'];
-            organInfo.segNumber = rows[i]['o_segNumber'];
-            organInfo.type = rows[i]['o_type'];
-            organInfo.bloodType = rows[i]['o_bloodType'];
-            organInfo.bloodSampleCount = rows[i]['o_bloodSampleCount'];
-            organInfo.organizationSampleType = rows[i]['o_organizationSampleType'];
-            organInfo.organizationSampleCount = rows[i]['o_organizationSampleCount'];
-            organInfo.createAt = rows[i]['o_createAt'];
-            organInfo.modifyAt = rows[i]['o_modifyAt'];
-            transbox.organInfo = organInfo;
+          organInfo.organid = rows[i]['o_organid'];
+          organInfo.segNumber = rows[i]['o_segNumber'];
+          organInfo.type = rows[i]['o_type'];
+          organInfo.bloodType = rows[i]['o_bloodType'];
+          organInfo.bloodSampleCount = rows[i]['o_bloodSampleCount'];
+          organInfo.organizationSampleType = rows[i]['o_organizationSampleType'];
+          organInfo.organizationSampleCount = rows[i]['o_organizationSampleCount'];
+          organInfo.createAt = rows[i]['o_createAt'];
+          organInfo.modifyAt = rows[i]['o_modifyAt'];
+          transbox.organInfo = organInfo;
 
-            toHospitalInfo.hospitalid = rows[i]['h_hospitalid'];
-            toHospitalInfo.name = rows[i]['h_name'];
-            toHospitalInfo.district = rows[i]['h_district'];
-            toHospitalInfo.address = rows[i]['h_address'];
-            toHospitalInfo.grade = rows[i]['h_grade'];
-            toHospitalInfo.remark = rows[i]['h_remark'];
-            toHospitalInfo.status = rows[i]['h_status'];
-            toHospitalInfo.createAt = rows[i]['h_createAt'];
-            toHospitalInfo.modifyAt = rows[i]['h_modifyAt'];
-            toHospitalInfo.account_id = rows[i]['h_account_id'];
-            transbox.toHospitalInfo =toHospitalInfo;
+          toHospitalInfo.hospitalid = rows[i]['h_hospitalid'];
+          toHospitalInfo.name = rows[i]['h_name'];
+          toHospitalInfo.district = rows[i]['h_district'];
+          toHospitalInfo.address = rows[i]['h_address'];
+          toHospitalInfo.grade = rows[i]['h_grade'];
+          toHospitalInfo.remark = rows[i]['h_remark'];
+          toHospitalInfo.status = rows[i]['h_status'];
+          toHospitalInfo.createAt = rows[i]['h_createAt'];
+          toHospitalInfo.modifyAt = rows[i]['h_modifyAt'];
+          toHospitalInfo.account_id = rows[i]['h_account_id'];
+          transbox.toHospitalInfo = toHospitalInfo;
 
-            transferPersonInfo.transferPersonid = rows[i]['tp_transferPersonid'];
-            transferPersonInfo.name = rows[i]['tp_name'];
-            transferPersonInfo.phone = rows[i]['tp_phone'];
-            transferPersonInfo.organType = rows[i]['tp_organType'];
-            transferPersonInfo.createAt = rows[i]['tp_createAt'];
-            transferPersonInfo.modifyAt = rows[i]['tp_modifyAt'];
-            transbox.transferPersonInfo = transferPersonInfo;
+          transferPersonInfo.transferPersonid = rows[i]['tp_transferPersonid'];
+          transferPersonInfo.name = rows[i]['tp_name'];
+          transferPersonInfo.phone = rows[i]['tp_phone'];
+          transferPersonInfo.organType = rows[i]['tp_organType'];
+          transferPersonInfo.createAt = rows[i]['tp_createAt'];
+          transferPersonInfo.modifyAt = rows[i]['tp_modifyAt'];
+          transbox.transferPersonInfo = transferPersonInfo;
 
-            opoInfo.opoid = rows[i]['op_opoid'];
-            opoInfo.name = rows[i]['op_name'];
-            opoInfo.district = rows[i]['op_district'];
-            opoInfo.address = rows[i]['op_address'];
-            opoInfo.grade = rows[i]['op_grade'];
-            opoInfo.contactPerson = rows[i]['op_contactPerson'];
-            opoInfo.contactPhone = rows[i]['op_contactPhone'];
-            opoInfo.remark = rows[i]['op_remark'];
-            opoInfo.createAt = rows[i]['op_createAt'];
-            opoInfo.modifyAt = rows[i]['op_modifyAt'];
-            transbox.opoInfo = opoInfo;
-            transfers.push(transbox);
-
+          opoInfo.opoid = rows[i]['op_opoid'];
+          opoInfo.name = rows[i]['op_name'];
+          opoInfo.district = rows[i]['op_district'];
+          opoInfo.address = rows[i]['op_address'];
+          opoInfo.grade = rows[i]['op_grade'];
+          opoInfo.contactPerson = rows[i]['op_contactPerson'];
+          opoInfo.contactPhone = rows[i]['op_contactPhone'];
+          opoInfo.remark = rows[i]['op_remark'];
+          opoInfo.createAt = rows[i]['op_createAt'];
+          opoInfo.modifyAt = rows[i]['op_modifyAt'];
+          transbox.opoInfo = opoInfo;
+          transfers.push(transbox);
 
 
         }
-
 
 
         //transfers = JSON.stringify(transfers);
@@ -949,7 +947,7 @@ module.exports = {
         }
 
         BaseController.sendOk('获取转运信息成功', info, res);
-         console.log("mysql query");
+        console.log("mysql query");
         //把搜索值输出
         //app.get('/', function (req, res) {
         //  res.send(arr);
@@ -1138,8 +1136,6 @@ module.exports = {
       }
 
 
-
-
       Transfer.find(findParams).populate('box_id').populate('opo_id').populate('organ_id').populate('transferPerson_id').populate('to_hosp_id').exec(function (err, records) {
         //Transfer.find(findParams).exec(function(err, records) {
 
@@ -1178,147 +1174,126 @@ module.exports = {
       });
 
 
-
-
-
     });
 
   },
-/**
- * 导出word
- */
-getExportFile : function(req, res) {
-  console.log('exportWord-------------');
-  var docx = officegen ( 'docx' );
-  docx.on ( 'finalize', function ( written ) {
-    console.log ( 'Finish to create Word file.\nTotal bytes created: ' + written + '\n' );
-  });
+  /**
+   * 导出word
+   */
+  getExportFile: function (req, res) {
+    console.log('exportWord-------------');
+    var docx = officegen('docx');
+    docx.on('finalize', function (written) {
+      console.log('Finish to create Word file.\nTotal bytes created: ' + written + '\n');
+    });
 
 
-  docx.on ( 'error', function ( err ) {
-    console.log ( err );
-  });
-
-
-  var pObj = docx.createP ( { align: 'center' } );// 创建行 设置居中
-  pObj.addText ( '血液透析（滤过）治疗知情同意书', { bold: true,font_face: 'Arial', font_size: 18 });// 添加文字 设置字体样式 加粗 大小
-  var table = [
-    [{
-      val: "No.",
-      opts: {
-        cellColWidth: 4261,
-        b:true,
-        sz: '48',
-        shd: {
-          fill: "7F7F7F",
-          themeFill: "text1",
-          "themeFillTint": "80"
-        },
-        fontFamily: "Avenir Book"
-      }
-    },{
-      val: "Title1",
-      opts: {
-        b:true,
-        color: "A00000",
-        align: "right",
-        shd: {
-          fill: "92CDDC",
-          themeFill: "text1",
-          "themeFillTint": "80"
-        }
-      }
-    },{
-      val: "Title2",
-      opts: {
-        align: "center",
-        vAlign: "center",
-        cellColWidth: 42,
-        b:true,
-        sz: '48',
-        shd: {
-          fill: "92CDDC",
-          themeFill: "text1",
-          "themeFillTint": "80"
-        }
-      }
-    }],
-    [1,'All grown-ups were once children',''],
-    [2,'there is no harm in putting off a piece of work until another day.',''],
-    [3,'But when it is a matter of baobabs, that always means a catastrophe.',''],
-    [4,'watch out for the baobabs!','END'],
-  ]
-
-  var tableStyle = {
-    tableColWidth: 3000,
-    tableSize: 24,
-    tableColor: "ada",
-    tableAlign: "left",
-    borders: true
-  }
-
-  docx.createTable (table, tableStyle);
-
-  var pObj = docx.createP ();
-  pObj.addImage ( path.resolve(__dirname, 'images/icon.png' ) ,{width:100,height:50});
-  //pObj.addText ( '姓名' );
-  //pObj.addText ( ' with color', { color: '000088' } );// 设置字体颜色
-  //pObj.addText ( '性别' );
-  //pObj.addText ( '', { color: '00ffff', back: '000088' } );
-  //pObj.addText ( '年龄' );
-  //pObj.addText ( '岁', { color: '000088' } );
-  //
-  //
-  //var pObj = docx.createP ();
-  //pObj.addText ( '门诊（住院）号' );
-  //pObj.addText ( ' with color', { color: '000088' } );
-  //pObj.addText ( '诊断' );
-  //pObj.addText ( '', { color: '000088'} );
-  //
-  //
-  //var pObj = docx.createP ();
-  //pObj.addText ( '一、血液透析（滤过）能有效清除身体内过多的水分合霉素，是治疗急性和慢性肾衰竭等疾病的有效方法。' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '二、血液透析（滤过）治疗时，首先需要将患者血液引到体外，然后通过透析或滤过等方法清除水分和霉素，经受理后的血液再回到患者体外。' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '三、为了有效引出血液，治疗前需要建立血管通路（动静脉内痿或深静脉插管）。' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '四、为防止血液在体外管路和透析器发生凝固，一般需要在透析前和透析过程中注射肝素等抗凝药物。' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '五、血透过程中和治疗期间存在下列医疗风险，可能造成严重后果，甚至危及生命：' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '1.低血压，心力衰竭，心肌梗塞，心律失常，脑血管意外；' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '2.空气球栓塞；' );
-  //var pObj = docx.createP ();
-  //pObj.addText ( '3.过敏反应；' );
+    docx.on('error', function (err) {
+      console.log(err);
+    });
 
 
 
 
-  var out = fs.createWriteStream ( 'out.docx' );// 文件写入
-  out.on ( 'error', function ( err ) {
-    console.log ( err );
-  });
 
 
-  var result = docx.generate (out);// 服务端生成word
+
+    var data = [[{
+      type: "text",
+      val: "XX/T XXXXX--XXXX",
+      opt: {color: '000000'},
+      lopt: {align: 'right'}
+    }, {
+      type: "text",
+      val: "附录",
+      opt: {color: '000000'},
+      lopt: {align: 'center'}
+    },
+      {
+        type: "text",
+        val: "附录",
+        opt: {color: '000000'},
+        lopt: {align: 'center'}
+      },
+      {
+        type: "linebreak"
+      }, {
+        type: "text",
+        val: "附录",
+        opt: {color: '000000'},
+        lopt: {align: 'center'}
+      }], {
+      type: "horizontalline"
+    }, [{backline: 'EDEDED'}, {
+      type: "text",
+      val: "  backline text1.",
+      opt: {bold: true}
+    }, {
+      type: "text",
+      val: "  backline text2.",
+      opt: {color: '000088'}
+    }], {
+      type: "text",
+      val: "Left this text.",
+      lopt: {align: 'left'}
+    }, {
+      type: "text",
+      val: "Center this text.",
+      lopt: {align: 'center'}
+    }, {
+      type: "text",
+      val: "Right this text.",
+      lopt: {align: 'right'}
+    }, {
+      type: "text",
+      val: "Fonts face only.",
+      opt: {font_face: 'Arial'}
+    }, {
+      type: "text",
+      val: "Fonts face and size.",
+      opt: {font_face: 'Arial', font_size: 40}
+    },
+      {
+      type: "table",
+      val: table,
+      opt: tableStyle
+    }, [{ // arr[0] is common option.
+      align: 'right'
+    }, {
+      type: "image",
+      path: path.resolve(__dirname, 'images/a2.png')
+    }, {
+      type: "image",
+      path: path.resolve(__dirname, 'images/a2.png')
+    }], {
+      type: "pagebreak"
+    }
+    ]
+
+    docx.createByJson(data);
 
 
-  res.writeHead ( 200, {
+    var out = fs.createWriteStream('out.docx');// 文件写入
+    out.on('error', function (err) {
+      console.log(err);
+    });
+
+
+    var result = docx.generate(out);// 服务端生成word
+
+
+    res.writeHead(200, {
 
 // 注意这里的type设置，导出不同文件type值不同applicationnd.openxmlformats-officedocument.presentationml.presentation
-    "Content-Type": "applicationnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Type": "applicationnd.openxmlformats-officedocument.wordprocessingml.document",
 
-    'Content-disposition': 'attachment; filename=out.docx'
+      'Content-disposition': 'attachment; filename=out.docx'
 
-  });
-  docx.generate (res);// 客户端导出word
-
-
+    });
+    docx.generate(res);// 客户端导出word
 
 
-},
+  },
   getExportFiles: function (req, res) {
     var transferid = req.params.transferid;
     var findParams = {
